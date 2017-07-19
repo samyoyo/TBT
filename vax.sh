@@ -2,7 +2,7 @@
 
 if [[ $3 == "" ]] || [[ $1 == "-h" ]] || [[ $1 == "--help" ]] || [[ ! $1 == "-i" ]] ; then
 	echo ""
-	echo "[!]		VAS WPS-Breaker "
+	echo "[!]		VAX WPS-Breaker "
 	echo ""
 	echo "[+] -h   --help		=>> show this message"
 	echo "[+] -i   --interface	=>> choose an interface"
