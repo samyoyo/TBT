@@ -6,11 +6,11 @@ yellow='\e[1;33m'
 ul='\e[1;4m'
 purp='\e[1;35m'
 green='\e[1;32m'
-
 if [[ $1 == "" ]] || [[ $2 == "" ]] || [[ $3 == "" ]] ; then
 	echo -e "${red}usage. bash $0 <target> <gateway> <interface>"
         echo -e "eg. bash $0 192.168.1.5 192.168.1.1 wlan0"
         echo -e "eg. bash $0 all 192.168.1.1 wlan0"
+        echo -e "eg. bash $0 all 192.168.1.1 wlan0 forward=true"
 	exit
 fi
 echo -e "$red"
@@ -23,6 +23,10 @@ echo '| \| |((_|_))(| |_           '
 echo '| .` / _|| || |  _|          '
 echo '|_|\_\__| \_,_|\__|          '
 echo '|'
+if [[ $4 =~ "true" ]] ; then
+   echo 1 > /proc/sys/net/ipv4/ip_forward
+   echo '|[+] echo 1 > /proc/sys/net/ipv4/ip_forward'
+fi
 trap " echo "" ; kill -9 `pgrep arpspoof` 2> /dev/null ; cd .. ; rm -rf .workspace ; exit " SIGINT SIGTERM
 if [[ -d .workspace ]] ; then rm -rf .workspace ; fi
 mkdir .workspace
