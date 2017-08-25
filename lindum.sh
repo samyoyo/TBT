@@ -22,9 +22,9 @@ if [[ $1 == "-u" ]] ; then
 elif [[ $3 == "-u" ]] ; then
 	target=$4
 else
-	echo "Usage. ./$0 -u Target_url -r Number_of_rounds"
+	echo "Usage. ./$0 -u Target_url -r Number_of_rounds -f file_types"
 	echo "eg. ./$0 -u google.com -r 5"
-        echo "eg. ./$0 -u google.com -r .php,.pdf,.png"
+        echo "eg. ./$0 -u google.com -r 3 -f .php,.pdf,.png"
 	exit
 fi
 echo -e "${green}|"
@@ -49,7 +49,7 @@ fo=$5
 echo -e "${red}|__ ${purp}`date | awk {' print $4 '}`${red}|$yellow Target :${red} $url ${yellow}Number Of Rounds ($round)$normal"
 function a {
 echo -e "${red}|__ ${purp}`date | awk {' print $4 '}`${red}|$yellow Start Links ${red}Dumping$yellow At Round $x $normal"
-lynx -dump $url | grep $url | awk {' print $2 '} | sort -u | grep -v "javascript" | grep -e ^"http" -e ^"www" > $x.txt
+lynx -dump $url | grep $url | awk {' print $2 '} | sort -u | grep -v "javascript" | grep -ve '>' -e "<" | grep -e ^"http" -e ^"www" > $x.txt 2> /dev/null
 for i in `cat $x.txt | sort -u` ; do
         if [[ $fo == '-f' ]] ; then
 	       echo -e "${red}	|__${purp}`date | awk {' print $4 '}`${red}|${red} $i $normal" | grep -e "Found" -e "Start" -e "Target" -e $f
@@ -71,7 +71,7 @@ a
 for round in `seq 2 $round` ; do
 	echo -e "${red}|__ ${purp}`date | awk {' print $4 '}`${red}|$yellow Start Links ${red}Dumping$yellow At Round $y $normal"
 	for i in `cat $x.txt` ; do
-       		v=`lynx -dump $i | grep $url | awk {' print $2 '}`
+       		v=`lynx -dump $i | grep $url | awk {' print $2 '} | grep -ve '>' -e "<" 2> /dev/null`
 		for b in $( echo $v 2> /dev/null ) ; do
                         if [[ $fo == '-f' ]] ; then
 	           		echo -e "${red}	|__ ${purp}`date | awk {' print $4 '}`${red}|$yellow $b" | grep -e "Found" -e "Start" -e "Target" -e $f
